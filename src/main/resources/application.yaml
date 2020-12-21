@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: miaosha
+  datasource:
+    druid:
+      url: jdbc:mysql://181.215.182.88:3306/miaosha?useSSL=false
+      username: root
+      password: 123456q!
+      filter: stat
+      max-active: 20
+      initial-size: 1
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      async-init: true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8080
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml #这里是mapper的配置文件
+  configuration:
+    jdbc-type-for-null: 'null'
+
