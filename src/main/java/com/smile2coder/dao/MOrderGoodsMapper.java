@@ -1,7 +1,9 @@
 package com.smile2coder.dao;
 
 import com.smile2coder.model.MOrderGoods;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface MOrderGoodsMapper {
     int deleteByPrimaryKey(Integer id);
 

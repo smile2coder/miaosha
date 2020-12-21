@@ -1,7 +1,9 @@
 package com.smile2coder.dao;
 
 import com.smile2coder.model.MAddress;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface MAddressMapper {
     int deleteByPrimaryKey(Integer id);
 

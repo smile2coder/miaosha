@@ -1,7 +1,9 @@
 package com.smile2coder.dao;
 
 import com.smile2coder.model.MUser;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface MUserMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,7 @@ public interface MUserMapper {
     int updateByPrimaryKeySelective(MUser record);
 
     int updateByPrimaryKey(MUser record);
+
+    MUser selectByUsername(String username);
+
 }
