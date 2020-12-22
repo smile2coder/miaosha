@@ -11,6 +11,10 @@ import java.util.Date;
  */
 @Data
 public class BaseModel {
+
+    public static final byte STATUS_NORMAL = 0;
+    public static final byte STATUS_DELETED = -1;
+
     private Integer id;
 
     private Date createTime;

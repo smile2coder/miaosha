@@ -3,7 +3,7 @@ package com.smile2coder.service.impl;
 import com.smile2coder.dao.MUserMapper;
 import com.smile2coder.dto.login.LoginReqDto;
 import com.smile2coder.exception.IncorrectCredentialsException;
-import com.smile2coder.interceptor.TokenHolder;
+import com.smile2coder.holder.TokenHolder;
 import com.smile2coder.model.MUser;
 import com.smile2coder.service.TokenService;
 import com.smile2coder.service.UserService;

@@ -10,4 +10,6 @@ import com.smile2coder.dto.order.OrderReqDto;
 public interface OrderService {
 
     boolean order(OrderReqDto orderReqDto);
+
+    int selectCountByUserIdAndGoodsId(Integer userId, Integer goodsId);
 }

@@ -162,4 +162,9 @@
             pay_price     = #{payPrice,jdbcType=DECIMAL}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectCountByUserIdAndGoodsId" resultType="int">
+        select count(1) from m_order o left join m_order_goods og on o.id = og.order_id
+        where o.user_id = #{userId} and og.goods_id = #{goodsId}
+    </select>
 </mapper>

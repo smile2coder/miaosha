@@ -3,6 +3,8 @@ package com.smile2coder.interceptor;
 import com.smile2coder.constant.Constant;
 import com.smile2coder.exception.UnKnowAccountException;
 import com.smile2coder.exception.UnLoginException;
+import com.smile2coder.holder.TokenHolder;
+import com.smile2coder.holder.UserHolder;
 import com.smile2coder.model.MUser;
 import com.smile2coder.service.TokenService;
 import com.smile2coder.service.UserService;
