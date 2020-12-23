@@ -162,4 +162,8 @@
             end_time     = #{endTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <update id="decrStock">
+        update m_goods set stock = stock - #{count} where id = #{goodsId} and stock >= #{count}
+    </update>
 </mapper>

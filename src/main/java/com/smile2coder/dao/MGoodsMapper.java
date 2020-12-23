@@ -1,6 +1,7 @@
 package com.smile2coder.dao;
 
 import com.smile2coder.model.MGoods;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,4 +17,6 @@ public interface MGoodsMapper {
     int updateByPrimaryKeySelective(MGoods record);
 
     int updateByPrimaryKey(MGoods record);
+
+    int decrStock(@Param("goodsId") Integer goodsId, @Param("count") int count);
 }

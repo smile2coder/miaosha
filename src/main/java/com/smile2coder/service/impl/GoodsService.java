@@ -8,4 +8,11 @@ import com.smile2coder.model.MGoods;
 public interface GoodsService {
 
     MGoods selectByGoodsId(Integer goodsId);
+
+    /**
+     * 减去库存 1
+     * @param goodsId
+     * @return
+     */
+    boolean decrStock(Integer goodsId);
 }

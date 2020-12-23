@@ -18,4 +18,10 @@ public class GoodsServiceImpl implements GoodsService {
     public MGoods selectByGoodsId(Integer goodsId) {
         return this.goodsMapper.selectByPrimaryKey(goodsId);
     }
+
+    @Override
+    public boolean decrStock(Integer goodsId) {
+        int decrStock = this.goodsMapper.decrStock(goodsId, 1);
+        return decrStock > 0;
+    }
 }

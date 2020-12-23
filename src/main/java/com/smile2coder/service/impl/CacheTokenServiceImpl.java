@@ -1,7 +1,6 @@
 package com.smile2coder.service.impl;
 
 import com.smile2coder.service.TokenService;
-import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.UUID;
@@ -17,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * 一个 String（UUID）占用 16 字节
  * 10000000 * (16+16+16)B = 480MB
  */
-@Service
 public class CacheTokenServiceImpl implements TokenService {
 
     private static Map<String, Integer> cache = new ConcurrentHashMap<>();

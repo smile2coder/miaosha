@@ -5,6 +5,7 @@ import com.smile2coder.dto.order.OrderReqDto;
 import com.smile2coder.exception.CommonException;
 import com.smile2coder.holder.UserHolder;
 import com.smile2coder.model.*;
+import com.smile2coder.service.Access;
 import com.smile2coder.service.OrderGoodsService;
 import com.smile2coder.service.OrderService;
 import com.smile2coder.service.SwitchService;
@@ -29,20 +30,30 @@ public class OrderServiceImpl implements OrderService {
     private GoodsService goodsService;
     @Autowired
     private OrderGoodsService orderGoodsService;
+    @Autowired
+    private Access access;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean order(OrderReqDto orderReqDto) {
         MGoods goods = this.goodsService.selectByGoodsId(orderReqDto.getGoodsId());
         if (!checkGoods(goods)) {
-            throw new CommonException("活动未开启或者已结束");
+            throw new CommonException("秒杀活动已结束");
         }
         MUser user = UserHolder.get();
         int count = this.selectCountByUserIdAndGoodsId(user.getId(), orderReqDto.getGoodsId());
         if (count > 0) {
             throw new CommonException("您已经参加过本次秒杀活动");
         }
+        // 根据一定的算法排除一些用户
+        if (this.access.access(goods.getId())) {
+            throw new CommonException("秒杀活动已结束");
+        }
         // 减去库存
+        if (!this.goodsService.decrStock(goods.getId())) {
+            switchService.setSwitch(goods.getId(), false);
+            throw new CommonException("秒杀活动已结束");
+        }
 
         MOrder order = new MOrder();
         BeanUtils.copyProperties(orderReqDto, order);
