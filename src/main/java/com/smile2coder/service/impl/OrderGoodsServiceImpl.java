@@ -17,4 +17,9 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
     public int insert(MOrderGoods orderGoods) {
         return this.orderGoodsMapper.insert(orderGoods);
     }
+
+    @Override
+    public MOrderGoods selectByOrderId(Integer orderId) {
+        return this.orderGoodsMapper.selectByOrderId(orderId);
+    }
 }

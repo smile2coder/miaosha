@@ -14,4 +14,6 @@ public interface UserService {
     Integer logout();
 
     boolean existByUsername(String username);
+
+    int lockUser(Integer userId);
 }

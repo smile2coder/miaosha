@@ -50,4 +50,9 @@ public class UserServiceImpl implements UserService {
     public boolean existByUsername(String username) {
         return this.selectByUsername(username) == null;
     }
+
+    @Override
+    public int lockUser(Integer userId) {
+        return this.mUserMapper.lockUser(userId);
+    }
 }

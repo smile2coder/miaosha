@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -37,6 +38,7 @@ public class OrderReqDto {
     private Integer goodsId;
 
     @Min(value = 1, message = "商品数量最少为1")
+    @Max(value = 1, message = "商品数量最多为1")
     @ApiModelProperty("商品数量")
     private Integer count;
 }

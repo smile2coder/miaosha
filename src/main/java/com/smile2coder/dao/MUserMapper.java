@@ -19,4 +19,5 @@ public interface MUserMapper {
 
     MUser selectByUsername(String username);
 
+    int lockUser(Integer userId);
 }

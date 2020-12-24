@@ -8,4 +8,6 @@ import com.smile2coder.model.MOrderGoods;
 public interface OrderGoodsService {
 
     int insert(MOrderGoods orderGoods);
+
+    MOrderGoods selectByOrderId(Integer orderId);
 }

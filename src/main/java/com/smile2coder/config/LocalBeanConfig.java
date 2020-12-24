@@ -1,10 +1,12 @@
 package com.smile2coder.config;
 
 import com.smile2coder.service.Access;
+import com.smile2coder.service.OrderService;
 import com.smile2coder.service.SwitchService;
 import com.smile2coder.service.TokenService;
 import com.smile2coder.service.impl.CacheSwitchServiceImpl;
 import com.smile2coder.service.impl.CacheTokenServiceImpl;
+import com.smile2coder.service.impl.OrderServiceImpl_v1;
 import com.smile2coder.service.impl.RandomAccess;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,5 +32,10 @@ public class LocalBeanConfig {
     @Bean
     public TokenService tokenService() {
         return new CacheTokenServiceImpl();
+    }
+
+    @Bean
+    public OrderService orderService() {
+        return new OrderServiceImpl_v1();
     }
 }

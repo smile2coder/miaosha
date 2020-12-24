@@ -144,4 +144,8 @@
         </include>
         from m_user where username = #{username}
     </select>
+
+    <select id="lockUser" resultType="int">
+        select id from m_user where id = #{userId} for update
+    </select>
 </mapper>

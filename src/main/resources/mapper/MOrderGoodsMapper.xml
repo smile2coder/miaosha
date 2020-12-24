@@ -151,4 +151,11 @@
             status       = #{status,jdbcType=TINYINT}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectByOrderId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+        </include>
+        from m_order_goods where order_id = #{orderId}
+    </select>
 </mapper>

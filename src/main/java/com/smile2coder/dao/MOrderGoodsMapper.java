@@ -16,4 +16,6 @@ public interface MOrderGoodsMapper {
     int updateByPrimaryKeySelective(MOrderGoods record);
 
     int updateByPrimaryKey(MOrderGoods record);
+
+    MOrderGoods selectByOrderId(Integer orderId);
 }
