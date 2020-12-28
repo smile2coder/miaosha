@@ -21,6 +21,10 @@ public enum ReturnCodeEnum {
     UN_LOGIN(510, "用户未登录"),
     UN_AUTH(515, "用户没有权限"),
     LOGIN_OUT(520, "用户退出登录"),
+    REQUEST_TOO_MANY(600, "请求太频繁，请稍后再试"),
+    GOODS_FINSH(610, "活动已结束"),
+    REPEAT_JOIN(620, "您已经参加过本次秒杀活动"),
+    JOIN_USER_TO_MANY(630, "参与秒杀活动的人太多了，请稍后再试"),
     ;
 
     private int code;

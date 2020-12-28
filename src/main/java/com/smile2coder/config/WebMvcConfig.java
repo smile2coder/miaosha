@@ -22,9 +22,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**", "/swagger-ui.html#/**")
+                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**", "/swagger-ui.html#/**", "/csrf", "/")
                 .excludePathPatterns("/login")
-                .excludePathPatterns("/user/existByUsername");
+                .excludePathPatterns("/user/existByUsername", "/user/register");
     }
 
     @Override

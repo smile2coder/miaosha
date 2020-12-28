@@ -1,5 +1,7 @@
 package com.smile2coder.common;
 
+import com.github.pagehelper.PageInfo;
+
 /**
  * @Author LKK
  * Date on 2020/8/17  下午 4:25
@@ -33,4 +35,13 @@ public class ReturnDataUtil {
         return new ReturnData(ReturnCodeEnum.ERROR.getCode(), reason);
     }
 
+    public static ReturnData page(PageInfo pageInfo) {
+        Page<Object> page = Page.builder()
+                .page(pageInfo.getPageNum())
+                .limit(pageInfo.getPageSize())
+                .total((int) pageInfo.getTotal())
+                .data(pageInfo.getList())
+                .build();
+        return success(page);
+    }
 }

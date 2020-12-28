@@ -1,9 +1,13 @@
 package com.smile2coder.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.smile2coder.dao.MOrderMapper;
 import com.smile2coder.dto.order.OrderDetailRespDto;
 import com.smile2coder.dto.order.OrderReqDto;
 import com.smile2coder.exception.CommonException;
+import com.smile2coder.exception.GoodsFinshException;
+import com.smile2coder.exception.RepeatJoinException;
 import com.smile2coder.holder.UserHolder;
 import com.smile2coder.model.*;
 import com.smile2coder.service.*;
@@ -12,11 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author zxt
  * @date 12/22/20
- * @desc 基于数据库的实现
+ * @desc 基于数据库的实现，适用于单机部署
  */
 public class OrderServiceImpl_v1 implements OrderService {
 
@@ -38,11 +43,7 @@ public class OrderServiceImpl_v1 implements OrderService {
     public Integer order(OrderReqDto orderReqDto) {
         MGoods goods = this.goodsService.selectByGoodsId(orderReqDto.getGoodsId());
         if (!checkGoods(goods)) {
-            throw new CommonException("秒杀活动已结束");
-        }
-        // 根据一定的算法排除一些用户
-        if (this.access.access(goods.getId())) {
-            throw new CommonException("秒杀活动已结束");
+            throw new GoodsFinshException();
         }
 
         MUser user = UserHolder.get();
@@ -51,17 +52,31 @@ public class OrderServiceImpl_v1 implements OrderService {
         this.userService.lockUser(user.getId());
         boolean success = this.isSuccess(user.getId(), orderReqDto.getGoodsId());
         if (success) {
-            throw new CommonException("您已经参加过本次秒杀活动");
+            throw new RepeatJoinException();
+        }
+
+        // 根据一定的算法排除一些用户
+        if (!this.access.access(goods.getId())) {
+            throw new CommonException("参与秒杀活动的人太多了，请稍后再试");
         }
 
         // 减去库存
         if (!this.goodsService.decrStock(goods.getId())) {
-            switchService.setSwitch(goods.getId(), false);
-            throw new CommonException("秒杀活动已结束");
+            goodsFinsh(goods.getId());
+            throw new GoodsFinshException();
         }
 
         Integer orderId = createOrder(orderReqDto, goods, user);
         return orderId;
+    }
+
+    /**
+     * 活动结束
+     * @param goodsId
+     */
+    private void goodsFinsh(Integer goodsId) {
+        switchService.setSwitch(goodsId, false);
+        this.goodsService.updateStatus(goodsId, MGoods.STATUS_FINSH);
     }
 
     private Integer createOrder(OrderReqDto orderReqDto, MGoods goods, MUser user) {
@@ -97,6 +112,9 @@ public class OrderServiceImpl_v1 implements OrderService {
     @Override
     public OrderDetailRespDto detail(Integer orderId) {
         MOrder order = this.selectByPrimaryKey(orderId);
+        if (order == null) {
+            throw new CommonException("订单不存在，订单id【%s】", orderId);
+        }
         MOrderGoods orderGoods = this.orderGoodsService.selectByOrderId(orderId);
         // 拼装
         OrderDetailRespDto result = new OrderDetailRespDto();
@@ -114,9 +132,23 @@ public class OrderServiceImpl_v1 implements OrderService {
     }
 
     @Override
+    public boolean isSuccess(Integer goodsId) {
+        Integer userId = UserHolder.get().getId();
+        return isSuccess(userId, goodsId);
+    }
+
+    @Override
     public boolean isSuccess(Integer userId, Integer goodsId) {
         int count = this.selectCountByUserIdAndGoodsId(userId, goodsId);
         return count > 0;
+    }
+
+    @Override
+    public PageInfo page(Integer page, Integer limit) {
+        MUser user = UserHolder.get();
+        PageHelper.startPage(page, limit);
+        List<MOrder> list = this.orderMapper.list(user.getId());
+        return new PageInfo(list);
     }
 
     private boolean checkGoods(MGoods goods) {
@@ -126,6 +158,7 @@ public class OrderServiceImpl_v1 implements OrderService {
         }
         Date now = new Date();
         if(now.before(goods.getStartTime()) || now.after(goods.getEndTime())) {
+            switchService.setSwitch(goods.getId(), false);
             return false;
         }
         return true;

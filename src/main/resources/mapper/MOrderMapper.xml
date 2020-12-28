@@ -29,17 +29,17 @@
         from m_order
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.smile2coder.model.MOrder">
-        insert into m_order (id, create_time, update_time,
+    <insert id="insert" parameterType="com.smile2coder.model.MOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into m_order (create_time, update_time,
                              status, user_id, user_nickname,
                              user_phone, type, user_address,
                              actual_price, pay_price)
-        values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+        values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
                 #{status,jdbcType=TINYINT}, #{userId,jdbcType=INTEGER}, #{userNickname,jdbcType=VARCHAR},
                 #{userPhone,jdbcType=CHAR}, #{type,jdbcType=TINYINT}, #{userAddress,jdbcType=VARCHAR},
                 #{actualPrice,jdbcType=DECIMAL}, #{payPrice,jdbcType=DECIMAL})
     </insert>
-    <insert id="insertSelective" parameterType="com.smile2coder.model.MOrder">
+    <insert id="insertSelective" parameterType="com.smile2coder.model.MOrder" useGeneratedKeys="true" keyProperty="id">
         insert into m_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -166,5 +166,12 @@
     <select id="selectCountByUserIdAndGoodsId" resultType="int">
         select count(1) from m_order o left join m_order_goods og on o.id = og.order_id
         where o.user_id = #{userId} and og.goods_id = #{goodsId}
+    </select>
+
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+        </include>
+        from m_order where user_id = #{userId}
     </select>
 </mapper>

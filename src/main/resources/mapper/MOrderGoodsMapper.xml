@@ -28,17 +28,17 @@
         from m_order_goods
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.smile2coder.model.MOrderGoods">
-        insert into m_order_goods (id, order_id, goods_id,
+    <insert id="insert" parameterType="com.smile2coder.model.MOrderGoods" useGeneratedKeys="true" keyProperty="id">
+        insert into m_order_goods (order_id, goods_id,
                                    goods_name, pay_price, actual_price,
                                    count, create_time, update_time,
                                    status)
-        values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER},
+        values (#{orderId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER},
                 #{goodsName,jdbcType=VARCHAR}, #{payPrice,jdbcType=DECIMAL}, #{actualPrice,jdbcType=DECIMAL},
                 #{count,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
                 #{status,jdbcType=TINYINT})
     </insert>
-    <insert id="insertSelective" parameterType="com.smile2coder.model.MOrderGoods">
+    <insert id="insertSelective" parameterType="com.smile2coder.model.MOrderGoods" useGeneratedKeys="true" keyProperty="id">
         insert into m_order_goods
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

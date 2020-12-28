@@ -1,5 +1,6 @@
 package com.smile2coder.service;
 
+import com.github.pagehelper.PageInfo;
 import com.smile2coder.dto.order.OrderDetailRespDto;
 import com.smile2coder.dto.order.OrderReqDto;
 import com.smile2coder.model.MOrder;
@@ -19,5 +20,9 @@ public interface OrderService {
 
     MOrder selectByPrimaryKey(Integer id);
 
+    boolean isSuccess(Integer goodsId);
+
     boolean isSuccess(Integer userId, Integer goodsId);
+
+    PageInfo page(Integer page, Integer limit);
 }

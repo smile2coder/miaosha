@@ -4,6 +4,8 @@ import com.smile2coder.model.MGoods;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface MGoodsMapper {
     int deleteByPrimaryKey(Integer id);
@@ -19,4 +21,10 @@ public interface MGoodsMapper {
     int updateByPrimaryKey(MGoods record);
 
     int decrStock(@Param("goodsId") Integer goodsId, @Param("count") int count);
+
+    List<MGoods> list();
+
+    int updateStatus(@Param("goodsId") Integer goodsId, @Param("status") Byte status);
+
+    List<Integer> selectIdsByStatus(byte status);
 }

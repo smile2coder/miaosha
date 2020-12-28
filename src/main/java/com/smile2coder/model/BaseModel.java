@@ -12,7 +12,13 @@ import java.util.Date;
 @Data
 public class BaseModel {
 
+    /**
+     * 正常
+     */
     public static final byte STATUS_NORMAL = 0;
+    /**
+     * 删除
+     */
     public static final byte STATUS_DELETED = -1;
 
     private Integer id;

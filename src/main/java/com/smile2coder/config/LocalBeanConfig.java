@@ -1,13 +1,7 @@
 package com.smile2coder.config;
 
-import com.smile2coder.service.Access;
-import com.smile2coder.service.OrderService;
-import com.smile2coder.service.SwitchService;
-import com.smile2coder.service.TokenService;
-import com.smile2coder.service.impl.CacheSwitchServiceImpl;
-import com.smile2coder.service.impl.CacheTokenServiceImpl;
-import com.smile2coder.service.impl.OrderServiceImpl_v1;
-import com.smile2coder.service.impl.RandomAccess;
+import com.smile2coder.service.*;
+import com.smile2coder.service.impl.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,7 +15,7 @@ public class LocalBeanConfig {
 
     @Bean
     public Access access() {
-        return new RandomAccess(0.1f);
+        return new RandomAccess(0.5f);
     }
 
     @Bean
@@ -37,5 +31,10 @@ public class LocalBeanConfig {
     @Bean
     public OrderService orderService() {
         return new OrderServiceImpl_v1();
+    }
+
+    @Bean
+    public Limiter limiter() {
+        return new DefaultRateLimiter();
     }
 }

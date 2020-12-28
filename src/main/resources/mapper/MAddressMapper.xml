@@ -25,15 +25,15 @@
         from m_address
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.smile2coder.model.MAddress">
-        insert into m_address (id, create_time, update_time,
+    <insert id="insert" parameterType="com.smile2coder.model.MAddress" useGeneratedKeys="true" keyProperty="id">
+        insert into m_address (create_time, update_time,
                                status, user_id, delivery_address,
                                user_phone, user_nickname)
-        values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+        values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
                 #{status,jdbcType=TINYINT}, #{userId,jdbcType=INTEGER}, #{deliveryAddress,jdbcType=VARCHAR},
                 #{userPhone,jdbcType=CHAR}, #{userNickname,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.smile2coder.model.MAddress">
+    <insert id="insertSelective" parameterType="com.smile2coder.model.MAddress" useGeneratedKeys="true" keyProperty="id">
         insert into m_address
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

@@ -26,15 +26,15 @@
         from m_user
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.smile2coder.model.MUser">
-        insert into m_user (id, username, password,
+    <insert id="insert" parameterType="com.smile2coder.model.MUser" useGeneratedKeys="true" keyProperty="id">
+        insert into m_user (username, password,
                             nickname, salt, create_time,
                             status, update_time, last_login_time)
-        values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
                 #{nickname,jdbcType=VARCHAR}, #{salt,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
                 #{status,jdbcType=BIT}, #{updateTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.smile2coder.model.MUser">
+    <insert id="insertSelective" parameterType="com.smile2coder.model.MUser" useGeneratedKeys="true" keyProperty="id">
         insert into m_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

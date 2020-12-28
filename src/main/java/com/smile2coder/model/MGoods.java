@@ -9,6 +9,11 @@ import java.util.Date;
 @Data
 public class MGoods extends BaseModel implements Serializable {
 
+    /**
+     * 结束
+     */
+    public static final Byte STATUS_FINSH = -2;
+
     private String name;
 
     private String subname;

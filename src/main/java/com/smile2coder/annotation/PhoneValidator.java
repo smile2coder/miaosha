@@ -11,7 +11,9 @@ import java.util.regex.Pattern;
  */
 public class PhoneValidator implements ConstraintValidator<Phone, String> {
     private Phone phone;
-    private final String pattern = "/^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/";
+    private final String pattern = "^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$";
+
+    private final Pattern DEFAULT_PATTERN = Pattern.compile(pattern);
 
     @Override
     public void initialize(Phone constraintAnnotation) {
@@ -24,9 +26,12 @@ public class PhoneValidator implements ConstraintValidator<Phone, String> {
             return false;
         }
         String pattern = phone.pattern();
+        Pattern p;
         if(pattern == null || "".equals(pattern)) {
-            pattern = this.pattern;
+            p = DEFAULT_PATTERN;
+        } else {
+            p = Pattern.compile(pattern);
         }
-        return Pattern.compile(pattern).matcher(value).matches();
+        return p.matcher(value).matches();
     }
 }

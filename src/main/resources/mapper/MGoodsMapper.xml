@@ -29,17 +29,17 @@
         from m_goods
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.smile2coder.model.MGoods">
-        insert into m_goods (id, create_time, update_time,
+    <insert id="insert" parameterType="com.smile2coder.model.MGoods" useGeneratedKeys="true" keyProperty="id">
+        insert into m_goods (create_time, update_time,
                              status, name, subname,
                              actual_price, pay_price, stock,
                              start_time, end_time)
-        values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+        values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
                 #{status,jdbcType=BIT}, #{name,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR},
                 #{actualPrice,jdbcType=DECIMAL}, #{payPrice,jdbcType=DECIMAL}, #{stock,jdbcType=INTEGER},
                 #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.smile2coder.model.MGoods">
+    <insert id="insertSelective" parameterType="com.smile2coder.model.MGoods" useGeneratedKeys="true" keyProperty="id">
         insert into m_goods
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -166,4 +166,19 @@
     <update id="decrStock">
         update m_goods set stock = stock - #{count} where id = #{goodsId} and stock >= #{count}
     </update>
+
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+        </include>
+        from m_goods where status = 0 and start_time &lt;= now() and end_time &gt;= now()
+    </select>
+
+    <update id="updateStatus">
+        update m_goods set status = #{status} where id = #{goodsId} and status != #{status}
+    </update>
+
+    <select id="selectIdsByStatus" resultType="java.lang.Integer">
+        select id from m_goods where status = #{status}
+    </select>
 </mapper>

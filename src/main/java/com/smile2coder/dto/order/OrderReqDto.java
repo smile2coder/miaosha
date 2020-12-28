@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel
 public class OrderReqDto {
 
-    @NotNull
+    @NotNull(message = "用户昵称不能为空")
     @ApiModelProperty("用户昵称")
     private String userNickname;
 
@@ -26,14 +26,15 @@ public class OrderReqDto {
     @ApiModelProperty("用户手机号")
     private String userPhone;
 
+    @NotNull(message = "订单类型不能为空")
     @ApiModelProperty("订单类型")
     private Byte type;
 
-    @NotNull
+    @NotNull(message = "收获地址不能为空")
     @ApiModelProperty("收获地址")
     private String userAddress;
 
-    @NotNull
+    @NotNull(message = "商品ID不能为空")
     @ApiModelProperty("商品ID")
     private Integer goodsId;
 

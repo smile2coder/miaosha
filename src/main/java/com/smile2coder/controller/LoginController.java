@@ -3,7 +3,6 @@ package com.smile2coder.controller;
 import com.smile2coder.common.ReturnData;
 import com.smile2coder.common.ReturnDataUtil;
 import com.smile2coder.dto.login.LoginReqDto;
-import com.smile2coder.model.MUser;
 import com.smile2coder.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +28,8 @@ public class LoginController {
     @ApiOperation("登录")
     @PostMapping("/login")
     public ReturnData login(@Valid LoginReqDto loginReqDto, BindingResult result) {
-        MUser user = this.userService.login(loginReqDto);
-        return ReturnDataUtil.success(user);
+        String token = this.userService.login(loginReqDto);
+        return ReturnDataUtil.success(token);
     }
 
     @ApiOperation("登出")
