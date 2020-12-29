@@ -7,6 +7,7 @@ import com.smile2coder.dto.order.OrderDetailRespDto;
 import com.smile2coder.dto.order.OrderReqDto;
 import com.smile2coder.exception.CommonException;
 import com.smile2coder.exception.GoodsFinshException;
+import com.smile2coder.exception.JoinUserToManyException;
 import com.smile2coder.exception.RepeatJoinException;
 import com.smile2coder.holder.UserHolder;
 import com.smile2coder.model.*;
@@ -48,7 +49,7 @@ public class OrderServiceImpl_v1 implements OrderService {
 
         MUser user = UserHolder.get();
         // 检查是否已经成功秒杀过。这里有一个问题，就是如果检查没有秒杀过，可能有多个请求通过，导致一个用户秒杀多个商品
-        // 解决方案：给当前用户加个锁（影响并发）
+        // 解决方案：给当前用户加个锁
         this.userService.lockUser(user.getId());
         boolean success = this.isSuccess(user.getId(), orderReqDto.getGoodsId());
         if (success) {
@@ -57,7 +58,7 @@ public class OrderServiceImpl_v1 implements OrderService {
 
         // 根据一定的算法排除一些用户
         if (!this.access.access(goods.getId())) {
-            throw new CommonException("参与秒杀活动的人太多了，请稍后再试");
+            throw new JoinUserToManyException();
         }
 
         // 减去库存
