@@ -40,9 +40,10 @@ public class OrderServiceImpl_v1 implements OrderService {
     private UserService userService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, noRollbackFor = GoodsFinshException.class)
     public Integer order(OrderReqDto orderReqDto) {
         MGoods goods = this.goodsService.selectByGoodsId(orderReqDto.getGoodsId());
+        // 查看当前商品是否开始秒杀或者结束秒杀
         if (!checkGoods(goods)) {
             throw new GoodsFinshException();
         }
@@ -67,6 +68,7 @@ public class OrderServiceImpl_v1 implements OrderService {
             throw new GoodsFinshException();
         }
 
+        // 生成订单
         Integer orderId = createOrder(orderReqDto, goods, user);
         return orderId;
     }
@@ -75,7 +77,7 @@ public class OrderServiceImpl_v1 implements OrderService {
      * 活动结束
      * @param goodsId
      */
-    private void goodsFinsh(Integer goodsId) {
+    public void goodsFinsh(Integer goodsId) {
         switchService.setSwitch(goodsId, false);
         this.goodsService.updateStatus(goodsId, MGoods.STATUS_FINSH);
     }
@@ -158,7 +160,9 @@ public class OrderServiceImpl_v1 implements OrderService {
             return false;
         }
         Date now = new Date();
-        if(now.before(goods.getStartTime()) || now.after(goods.getEndTime())) {
+        if(now.before(goods.getStartTime())
+                || now.after(goods.getEndTime())
+                || goods.getStatus().shortValue() == MGoods.STATUS_FINSH) {
             switchService.setSwitch(goods.getId(), false);
             return false;
         }

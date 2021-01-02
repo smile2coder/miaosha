@@ -3,9 +3,14 @@ spring:
     name: miaosha
   datasource:
     druid:
-      url: jdbc:mysql://181.215.182.88:3306/miaosha?useSSL=false
+#      url: jdbc:mysql://181.215.182.88:3306/miaosha?useSSL=false
+#      username: root
+#      password: 123456q!
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/miaosha?useSSL=false
       username: root
-      password: 123456q!
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
       filter: stat
       max-active: 20
       initial-size: 1
@@ -19,7 +24,6 @@ spring:
       pool-prepared-statements: true
       max-open-prepared-statements: 20
       async-init: true
-      driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8080
 
@@ -28,8 +32,8 @@ mybatis:
   configuration:
     jdbc-type-for-null: 'null'
     use-generated-keys: true
-logging:
-  level:
-    com:
-      smile2coder:
-        dao: debug
+#logging:
+#  level:
+#    com:
+#      smile2coder:
+#        dao: debug

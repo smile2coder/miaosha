@@ -5,9 +5,9 @@ import com.smile2coder.dto.user.UserRegisterReqDto;
 import com.smile2coder.model.MUser;
 
 public interface UserService {
-    
+
     MUser selectByUsername(String username);
-    
+
     MUser selectByUserId(Integer userId);
 
     String login(LoginReqDto loginReqDto);
@@ -23,4 +23,6 @@ public interface UserService {
     Integer register(UserRegisterReqDto userRegisterReqDto);
 
     int updateByPrimaryKeySelective(MUser record);
+
+    int insert(MUser user);
 }

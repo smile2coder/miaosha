@@ -88,4 +88,9 @@ public class UserServiceImpl implements UserService {
     public int updateByPrimaryKeySelective(MUser record) {
         return this.mUserMapper.updateByPrimaryKeySelective(record);
     }
+
+    @Override
+    public int insert(MUser user) {
+        return this.mUserMapper.insertSelective(user);
+    }
 }
