@@ -39,7 +39,7 @@ public class LimiterAspect {
 
         MUser user = UserHolder.get();
 
-        if (!limiter.createInstance(user.getId(), permitsPerSecond) || !limiter.tryAcquire(user.getId())) {
+        if (limiter.tryAcquire(user.getId(), permitsPerSecond)) {
             throw new RequestTooManyException();
         }
         return pjp.proceed();
