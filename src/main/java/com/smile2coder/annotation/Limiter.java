@@ -20,6 +20,4 @@ public @interface Limiter {
 
     @AliasFor("permitsPerSecond")
     double value() default 5;
-
-    double permitsPerSecond() default 5;
 }
