@@ -1,4 +1,4 @@
-package com.smile2coder.service.impl;
+package com.smile2coder.service.impl.v1;
 
 import com.smile2coder.service.SwitchService;
 

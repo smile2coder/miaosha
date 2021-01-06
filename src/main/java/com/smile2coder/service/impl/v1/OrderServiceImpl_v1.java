@@ -1,4 +1,4 @@
-package com.smile2coder.service.impl;
+package com.smile2coder.service.impl.v1;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
