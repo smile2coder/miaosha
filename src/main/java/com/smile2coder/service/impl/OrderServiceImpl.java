@@ -24,7 +24,7 @@ import java.util.List;
  * @date 12/22/20
  * @desc 基于数据库的实现，适用于单机部署
  */
-public class OrderServiceImpl_v1 implements OrderService {
+public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private MOrderMapper orderMapper;
@@ -77,7 +77,7 @@ public class OrderServiceImpl_v1 implements OrderService {
      * 活动结束
      * @param goodsId
      */
-    public void goodsFinsh(Integer goodsId) {
+    private void goodsFinsh(Integer goodsId) {
         switchService.setSwitch(goodsId, false);
         this.goodsService.updateStatus(goodsId, MGoods.STATUS_FINSH);
     }

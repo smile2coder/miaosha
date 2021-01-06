@@ -30,7 +30,7 @@ public class LocalBeanConfig {
 
     @Bean
     public OrderService orderService() {
-        return new OrderServiceImpl_v1();
+        return new OrderServiceImpl();
     }
 
     @Bean
