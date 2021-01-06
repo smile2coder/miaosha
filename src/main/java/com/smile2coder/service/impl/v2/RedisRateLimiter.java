@@ -1,7 +1,6 @@
 package com.smile2coder.service.impl.v2;
 
 import com.smile2coder.service.Limiter;
-import lombok.AllArgsConstructor;
 import org.redisson.api.RRateLimiter;
 import org.redisson.api.RateIntervalUnit;
 import org.redisson.api.RateType;
@@ -15,7 +14,6 @@ import java.util.Objects;
  * @date 1/6/21
  * @desc
  */
-@AllArgsConstructor
 public class RedisRateLimiter implements Limiter<RRateLimiter> {
 
     private static final String PREFIX = "limiter_";
@@ -33,7 +31,7 @@ public class RedisRateLimiter implements Limiter<RRateLimiter> {
     @Override
     public RRateLimiter createInstance(Object identity, double permitsPerSecond) {
         RRateLimiter rateLimiter = redissonClient.getRateLimiter(getKey(identity));
-        rateLimiter.trySetRate(RateType.OVERALL, (int)permitsPerSecond, 1, RateIntervalUnit.SECONDS);
+        rateLimiter.trySetRate(RateType.PER_CLIENT, (int)permitsPerSecond, 1, RateIntervalUnit.SECONDS);
         return rateLimiter;
     }
 

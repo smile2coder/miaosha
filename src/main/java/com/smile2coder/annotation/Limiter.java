@@ -1,7 +1,5 @@
 package com.smile2coder.annotation;
 
-import org.springframework.core.annotation.AliasFor;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -18,8 +16,6 @@ import static java.lang.annotation.ElementType.METHOD;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Limiter {
 
-    @AliasFor("permitsPerSecond")
     double value() default 5;
 
-    double permitsPerSecond() default 5;
 }

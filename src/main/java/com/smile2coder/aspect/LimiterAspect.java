@@ -35,11 +35,11 @@ public class LimiterAspect {
         MethodSignature signature = (MethodSignature)pjp.getSignature();
         Method method = signature.getMethod();
         com.smile2coder.annotation.Limiter annotation = method.getAnnotation(com.smile2coder.annotation.Limiter.class);
-        double permitsPerSecond = annotation.permitsPerSecond();
+        double permitsPerSecond = annotation.value();
 
         MUser user = UserHolder.get();
 
-        if (limiter.tryAcquire(user.getId(), permitsPerSecond)) {
+        if (!limiter.tryAcquire(user.getId(), permitsPerSecond)) {
             throw new RequestTooManyException();
         }
         return pjp.proceed();

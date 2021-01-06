@@ -1,14 +1,10 @@
 package com.smile2coder.init;
 
-import com.smile2coder.model.BaseModel;
-import com.smile2coder.service.GoodsService;
-import com.smile2coder.service.SwitchService;
+import com.smile2coder.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * @author zxt
@@ -19,13 +15,10 @@ import java.util.List;
 public class GoodsInit implements ApplicationRunner {
 
     @Autowired
-    private GoodsService goodsService;
-    @Autowired
-    private SwitchService switchService;
+    private StockService stockService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<Integer> goodsIds = this.goodsService.selectIdsByStatus(BaseModel.STATUS_NORMAL);
-        goodsIds.forEach(goodsId -> this.switchService.setSwitch(goodsId, true));
+        stockService.init();
     }
 }

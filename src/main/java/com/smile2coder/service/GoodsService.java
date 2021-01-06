@@ -1,6 +1,7 @@
 package com.smile2coder.service;
 
 import com.github.pagehelper.PageInfo;
+import com.smile2coder.dto.goods.GoodsStockDto;
 import com.smile2coder.model.MGoods;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface GoodsService {
     int updateStatus(Integer goodsId, Byte statusFinsh);
 
     List<Integer> selectIdsByStatus(byte status);
+
+    List<GoodsStockDto> selectStockByStatus(byte status);
 }

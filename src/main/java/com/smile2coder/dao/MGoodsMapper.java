@@ -1,5 +1,6 @@
 package com.smile2coder.dao;
 
+import com.smile2coder.dto.goods.GoodsStockDto;
 import com.smile2coder.model.MGoods;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -27,4 +28,6 @@ public interface MGoodsMapper {
     int updateStatus(@Param("goodsId") Integer goodsId, @Param("status") Byte status);
 
     List<Integer> selectIdsByStatus(byte status);
+
+    List<GoodsStockDto> selectStockByStatus(byte status);
 }

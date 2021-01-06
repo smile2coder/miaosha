@@ -12,6 +12,8 @@ import com.smile2coder.service.TokenService;
 import com.smile2coder.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(cacheNames = "user_", key = "#userId", sync = true)
     public MUser selectByUserId(Integer userId) {
         return this.mUserMapper.selectByPrimaryKey(userId);
     }
@@ -85,6 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CachePut(cacheNames = "user_", key = "#record.id")
     public int updateByPrimaryKeySelective(MUser record) {
         return this.mUserMapper.updateByPrimaryKeySelective(record);
     }

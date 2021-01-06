@@ -14,6 +14,10 @@
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
     </resultMap>
+    <resultMap id="GoodsStockMap" type="com.smile2coder.dto.goods.GoodsStockDto">
+        <id column="id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+    </resultMap>
     <sql id="Base_Column_List">
         id, create_time, update_time, status, name, subname, actual_price, pay_price, stock,
     start_time, end_time
@@ -180,5 +184,8 @@
 
     <select id="selectIdsByStatus" resultType="java.lang.Integer">
         select id from m_goods where status = #{status}
+    </select>
+    <select id="selectStockByStatus" resultMap="GoodsStockMap">
+        select id, stock from m_goods where status = #{status}
     </select>
 </mapper>

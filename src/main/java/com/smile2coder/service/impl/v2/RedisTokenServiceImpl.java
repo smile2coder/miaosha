@@ -1,7 +1,6 @@
 package com.smile2coder.service.impl.v2;
 
 import com.smile2coder.service.TokenService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -13,7 +12,6 @@ import java.util.UUID;
  * @date 1/6/21
  * @desc
  */
-@AllArgsConstructor
 public class RedisTokenServiceImpl implements TokenService {
 
     private static final String PREFIX = "token_";

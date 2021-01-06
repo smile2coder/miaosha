@@ -3,9 +3,11 @@ package com.smile2coder.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.smile2coder.dao.MGoodsMapper;
+import com.smile2coder.dto.goods.GoodsStockDto;
 import com.smile2coder.model.MGoods;
 import com.smile2coder.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class GoodsServiceImpl implements GoodsService {
     private MGoodsMapper goodsMapper;
 
     @Override
+    @Cacheable(cacheNames = "cache_GoodsServiceImpl_selectByGoodsId_", key = "#goodsId", sync = true)
     public MGoods selectByGoodsId(Integer goodsId) {
         return this.goodsMapper.selectByPrimaryKey(goodsId);
     }
@@ -45,5 +48,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Integer> selectIdsByStatus(byte status) {
         return this.goodsMapper.selectIdsByStatus(status);
+    }
+
+    @Override
+    public List<GoodsStockDto> selectStockByStatus(byte status) {
+        return this.goodsMapper.selectStockByStatus(status);
     }
 }

@@ -1,4 +1,4 @@
-package com.smile2coder.service.impl;
+package com.smile2coder.service.impl.v2;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,19 +12,29 @@ import com.smile2coder.exception.RepeatJoinException;
 import com.smile2coder.holder.UserHolder;
 import com.smile2coder.model.*;
 import com.smile2coder.service.*;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zxt
  * @date 12/22/20
  * @desc 基于数据库的实现，适用于单机部署
  */
-public class OrderServiceImpl implements OrderService {
+@SuppressWarnings("ALL")
+public class OrderServiceImpl_v2 implements OrderService {
+
+    private static ThreadPoolExecutor executor
+            = new ThreadPoolExecutor(16, 32, 60*60,
+            TimeUnit.SECONDS, new LinkedBlockingQueue<>(128), new ThreadPoolExecutor.CallerRunsPolicy());
 
     @Autowired
     private MOrderMapper orderMapper;
@@ -38,6 +48,10 @@ public class OrderServiceImpl implements OrderService {
     private Access access;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedissonClient redissonClient;
+    @Autowired
+    private StockService stockService;
 
     @Override
     @Transactional(rollbackFor = Exception.class, noRollbackFor = GoodsFinshException.class)
@@ -51,7 +65,10 @@ public class OrderServiceImpl implements OrderService {
         MUser user = UserHolder.get();
         // 检查是否已经成功秒杀过。这里有一个问题，就是如果检查没有秒杀过，可能有多个请求通过，导致一个用户秒杀多个商品
         // 解决方案：给当前用户加个锁
-        this.userService.lockUser(user.getId());
+        RLock lock = redissonClient.getLock(String.format("lock_%s_%s", goods.getId(), user.getId()));
+        if (!lock.tryLock()) {
+            throw new JoinUserToManyException();
+        }
         boolean success = this.isSuccess(user.getId(), orderReqDto.getGoodsId());
         if (success) {
             throw new RepeatJoinException();
@@ -63,14 +80,20 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // 减去库存
-        if (!this.goodsService.decrStock(goods.getId())) {
+        if (!this.stockService.decrStock(goods.getId())) {
             goodsFinsh(goods.getId());
             throw new GoodsFinshException();
         }
 
-        // 生成订单
-        Integer orderId = createOrder(orderReqDto, goods, user);
-        return orderId;
+        // 生成订单，这一步可以异步处理，但是结果要异步通知
+        // （或者另一种思路，不用异步通知，因为到这一步，秒杀肯定是成功了，订单是会创建成功的，所以可以根据用户ID和商品ID可以查到这一单）
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                createOrder(orderReqDto, goods, user);
+            }
+        });
+        return null;
     }
 
     /**

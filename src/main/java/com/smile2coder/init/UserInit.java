@@ -6,13 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 /**
  * @author zxt
  * @date 1/2/21
  * @desc 模拟生成登录用户，用于测试
  */
-//@Component
+@Component
 @Slf4j
 public class UserInit implements ApplicationRunner {
 
