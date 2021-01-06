@@ -1,27 +1,20 @@
 package com.smile2coder.service;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author zxt
  * @date 12/25/20
  * @desc 限流器
  */
-public interface Limiter {
+public interface Limiter<T> {
 
-    double DEFAULT_PERMITS = 5;
+    T createInstance(Object identity, double permitsPerSecond);
 
-    boolean createInstance(Object identity, double permitsPerSecond);
+    /**
+     *
+     * @param identity 身份
+     * @param permitsPerSecond 速率
+     * @return
+     */
+    boolean tryAcquire(Object identity, double permitsPerSecond);
 
-    boolean tryAcquire(Object identity);
-
-    boolean tryAcquire(Object identity, int permits);
-
-    void acquire(Object identity);
-
-    void acquire(Object identity, int permits);
-
-    boolean tryAcquire(Object identity, int timeout, TimeUnit unit);
-
-    boolean tryAcquire(Object identity, int permits, int timeout, TimeUnit unit);
 }
