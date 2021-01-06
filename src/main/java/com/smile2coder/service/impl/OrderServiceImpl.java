@@ -1,4 +1,4 @@
-package com.smile2coder.service.impl.v1;
+package com.smile2coder.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -24,7 +24,7 @@ import java.util.List;
  * @date 12/22/20
  * @desc 基于数据库的实现，适用于单机部署
  */
-public class OrderServiceImpl_v1 implements OrderService {
+public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private MOrderMapper orderMapper;
@@ -58,7 +58,7 @@ public class OrderServiceImpl_v1 implements OrderService {
         }
 
         // 根据一定的算法排除一些用户
-        if (!this.access.access(goods.getId())) {
+        if (!this.access.access(user.getId())) {
             throw new JoinUserToManyException();
         }
 
@@ -77,7 +77,7 @@ public class OrderServiceImpl_v1 implements OrderService {
      * 活动结束
      * @param goodsId
      */
-    public void goodsFinsh(Integer goodsId) {
+    private void goodsFinsh(Integer goodsId) {
         switchService.setSwitch(goodsId, false);
         this.goodsService.updateStatus(goodsId, MGoods.STATUS_FINSH);
     }

@@ -5,7 +5,7 @@ import com.smile2coder.service.impl.*;
 import com.smile2coder.service.impl.v1.CacheSwitchServiceImpl;
 import com.smile2coder.service.impl.v1.CacheTokenServiceImpl;
 import com.smile2coder.service.impl.v1.DefaultRateLimiter;
-import com.smile2coder.service.impl.v1.OrderServiceImpl_v1;
+import com.smile2coder.service.impl.OrderServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,7 +34,7 @@ public class LocalBeanConfig {
 
     @Bean
     public OrderService orderService() {
-        return new OrderServiceImpl_v1();
+        return new OrderServiceImpl();
     }
 
     @Bean

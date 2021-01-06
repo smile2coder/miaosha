@@ -2,6 +2,7 @@ package com.smile2coder.service.impl.v2;
 
 import com.smile2coder.service.SwitchService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Objects;
@@ -16,6 +17,7 @@ public class RedisSwitchServiceImpl implements SwitchService {
 
     private static final String PREFIX = "switch_";
 
+    @Autowired
     private RedisTemplate redisTemplate;
 
     @Override
