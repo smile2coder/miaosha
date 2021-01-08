@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author zxt
  * @date 12/22/20
- * @desc 基于数据库的实现，适用于单机部署
+ * @desc 基于数据库和redis的实现，适用于集群
  */
 @SuppressWarnings("ALL")
 public class OrderServiceImpl_v2 implements OrderService {
