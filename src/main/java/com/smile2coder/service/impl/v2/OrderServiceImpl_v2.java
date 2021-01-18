@@ -66,33 +66,37 @@ public class OrderServiceImpl_v2 implements OrderService {
         // 检查是否已经成功秒杀过。这里有一个问题，就是如果检查没有秒杀过，可能有多个请求通过，导致一个用户秒杀多个商品
         // 解决方案：给当前用户加个锁
         RLock lock = redissonClient.getLock(String.format("lock_%s_%s", goods.getId(), user.getId()));
-        if (!lock.tryLock()) {
-            throw new JoinUserToManyException();
-        }
-        boolean success = this.isSuccess(user.getId(), orderReqDto.getGoodsId());
-        if (success) {
-            throw new RepeatJoinException();
-        }
-
-        // 根据一定的算法排除一些用户
-        if (!this.access.access(user.getId())) {
-            throw new JoinUserToManyException();
-        }
-
-        // 减去库存
-        if (!this.stockService.decrStock(goods.getId())) {
-            goodsFinsh(goods.getId());
-            throw new GoodsFinshException();
-        }
-
-        // 生成订单，这一步可以异步处理，但是结果要异步通知
-        // （或者另一种思路，不用异步通知，因为到这一步，秒杀肯定是成功了，订单是会创建成功的，所以可以根据用户ID和商品ID可以查到这一单）
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                createOrder(orderReqDto, goods, user);
+        try {
+            if (!lock.tryLock()) {
+                throw new JoinUserToManyException();
             }
-        });
+            boolean success = this.isSuccess(user.getId(), orderReqDto.getGoodsId());
+            if (success) {
+                throw new RepeatJoinException();
+            }
+
+            // 根据一定的算法排除一些用户
+            if (!this.access.access(user.getId())) {
+                throw new JoinUserToManyException();
+            }
+
+            // 减去库存
+            if (!this.stockService.decrStock(goods.getId())) {
+                goodsFinsh(goods.getId());
+                throw new GoodsFinshException();
+            }
+
+            // 生成订单，这一步可以异步处理，但是结果要异步通知
+            // （或者另一种思路，不用异步通知，因为到这一步，秒杀肯定是成功了，订单是会创建成功的，所以可以根据用户ID和商品ID可以查到这一单）
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    createOrder(orderReqDto, goods, user);
+                }
+            });
+        } finally {
+            lock.unlock();
+        }
         return null;
     }
 
